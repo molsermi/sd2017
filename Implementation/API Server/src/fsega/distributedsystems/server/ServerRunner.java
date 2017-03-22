@@ -1,7 +1,7 @@
 package fsega.distributedsystems.server;
 
 
-// http://tutorials.jenkov.com/java-multithreaded-servers/singlethreaded-server.html
+// http://tutorials.jenkov.com/java-multithreaded-servers/
 public class ServerRunner {
 	public static void main(String[] args) {
 		SimpleServer server = SimpleServer.getInstance();

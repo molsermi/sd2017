@@ -2,34 +2,34 @@ package fsega.distributedsystems.server;
 
 import java.net.Socket;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-// http://tutorials.jenkov.com/java-multithreaded-servers/singlethreaded-server.html
+// http://tutorials.jenkov.com/java-multithreaded-servers
 public class SimpleServer implements Runnable {
-//	private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-	
+	private ExecutorService threadPool;
 	private ServerSocket serverSocket;
 	private boolean serverIsRunning;
-//	private Thread currentThread;
 	private int serverPort;
 	
 	private SimpleServer() {
-		this(8080);
+		this(8080, 32);
 	}
 	
-	private SimpleServer(int serverPort) {
+	private SimpleServer(int serverPort, int threadPoolSize) {
 		this.serverPort = serverPort;
+		this.threadPool = Executors.newFixedThreadPool(threadPoolSize);
 	}
 	
 	public static SimpleServer getInstance() {
 		return new SimpleServer();
 	}
 	
-	public static SimpleServer getInstance(int serverPort) {
-		return new SimpleServer(serverPort);
+	public static SimpleServer getInstance(int serverPort, int threadPoolSize) {
+		return new SimpleServer(serverPort, threadPoolSize);
 	}
 	
 	@Override
@@ -53,12 +53,7 @@ public class SimpleServer implements Runnable {
 				e.printStackTrace();
 			}
 			
-			try {
-				processClientRequest(clientSocket);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			threadPool.execute(new SimpleWorker(clientSocket));
 		}
 	}
 	
@@ -76,6 +71,7 @@ public class SimpleServer implements Runnable {
 			e.printStackTrace();
 		}
 		
+		this.threadPool.shutdown();
 		System.out.println(getFormattedEvent("Server stopped", false));
 	}
 	
@@ -90,18 +86,6 @@ public class SimpleServer implements Runnable {
 		}
 	}
 
-	private void processClientRequest(Socket clientSocket) throws IOException {
-		if (clientSocket == null) {
-			return;
-		}
-		
-		String header = "HTTP/1.1 200 OK\n\n";
-		String message = "hello world";
-		try (OutputStream outputStream = clientSocket.getOutputStream()) {
-			outputStream.write((header + String.format("<head><body>%s</body></head>", message)).getBytes());
-		}
-	}
-	
 	private String getFormattedEvent(String event, boolean insertStartingSymbol) {
 		String formatted = String.format("%s at %s", event, getCurrentTime());
 		
