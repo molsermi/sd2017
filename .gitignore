@@ -1,4 +1,2 @@
-Implementation/API Server project/API Server/bin
-Implementation/API Server project/API Server/.classpath
-Implementation/API Server project/API Server/.project
-Implementation/API Server project/API Server/.settings
+Implementation/API Server/bin
+Implementation/API Server/.*
