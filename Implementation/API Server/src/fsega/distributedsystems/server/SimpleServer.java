@@ -4,9 +4,9 @@ import java.net.Socket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.time.ZonedDateTime;
+import java.util.concurrent.Executors;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 // http://tutorials.jenkov.com/java-multithreaded-servers
 public class SimpleServer implements Runnable {
