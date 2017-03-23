@@ -23,7 +23,7 @@ public class ServerRunner {
 	}
 	
 	private static int getCommandLineArgumentValue(String[] args, int itemIndex, int defaultValue) {
-		if (itemIndex != -1 && itemIndex + 1 < args.length) {
+		if (itemIndex != -1 && itemIndex + 1 < args.length && args[itemIndex + 1].matches("^\\d+$")) {
 			return Integer.valueOf(args[itemIndex + 1]);
 		}
 		
