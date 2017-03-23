@@ -6,8 +6,8 @@ public class ServerRunner {
 		int portIndex = findArgIndex(args, "--port");
 		int threadsIndex = findArgIndex(args, "--threads");
 		
-		int port = getCommandLineArgumentValue(args, portIndex, 8080);
-		int threads =  getCommandLineArgumentValue(args, threadsIndex, 32);
+		int port = getCommandLineArgumentValue(args, portIndex, 0, 65535, 8080);
+		int threads =  getCommandLineArgumentValue(args, threadsIndex, 1, 64, 32);
 		
 		SimpleServer server = SimpleServer.getInstance(port, threads);
 		Thread thread = new Thread(server);
@@ -22,9 +22,11 @@ public class ServerRunner {
 		server.stopServer();
 	}
 	
-	private static int getCommandLineArgumentValue(String[] args, int itemIndex, int defaultValue) {
+	private static int getCommandLineArgumentValue(String[] args, int itemIndex, int minAcceptedValue, int maxAcceptedValue, 
+												   int defaultValue) {
 		if (itemIndex != -1 && itemIndex + 1 < args.length && args[itemIndex + 1].matches("^\\d+$")) {
-			return Integer.valueOf(args[itemIndex + 1]);
+			int value = Integer.valueOf(args[itemIndex + 1]);
+			return value <= maxAcceptedValue && value >= minAcceptedValue ? value : defaultValue;
 		}
 		
 		return defaultValue;
