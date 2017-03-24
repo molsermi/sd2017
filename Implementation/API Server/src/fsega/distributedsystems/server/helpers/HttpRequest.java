@@ -8,21 +8,18 @@ import java.io.InputStreamReader;
 public class HttpRequest implements AutoCloseable {
 	private String requestedUrl;
 	private BufferedReader reader;
+	private String requestedMethodLine;
 	
-	public HttpRequest(InputStream clientInputStream) {
+	public HttpRequest(InputStream clientInputStream) throws IOException {
 		String line = null;
+		reader = new BufferedReader(new InputStreamReader(clientInputStream));
 		
-		try {
-			reader = new BufferedReader(new InputStreamReader(clientInputStream));
-			while ((line = reader.readLine()) != null) {
-				if (line.startsWith("GET")) {
-					requestedUrl = extractUri(line);
-					break;
-				}
+		while ((line = reader.readLine()) != null) {
+			if (line.startsWith("GET")) {
+				requestedUrl = extractUri(line);
+				requestedMethodLine = line;
+				break;
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -33,6 +30,10 @@ public class HttpRequest implements AutoCloseable {
 	
 	public String getRequestedUrl() {
 		return requestedUrl;
+	}
+	
+	public String getRequestedMethodLine() {
+		return requestedMethodLine;
 	}
 
 	@Override

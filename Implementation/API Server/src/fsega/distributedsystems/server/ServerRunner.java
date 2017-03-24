@@ -1,24 +1,32 @@
 package fsega.distributedsystems.server;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+import java.util.logging.FileHandler;
+
 import fsega.distributedsystems.server.helpers.NumericInterval;
 
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class ServerRunner {
-	public static void main(String[] args) {
+	private static Logger logger = Logger.getLogger("");
+	private static final String logFilePattern = "serverLog.%g.%u.xml";
+	
+	public static void main(String[] args) throws SecurityException, IOException {
+		// since this is the root logger, all logs will propagate to it
+		logger.addHandler(new FileHandler(logFilePattern, 10240, 5, true));
+		
 		int portIndex = findArgIndex(args, "--port");
 		int threadsIndex = findArgIndex(args, "--threads");
 		
 		int port = getCommandLineArgumentValue(args, portIndex, new NumericInterval<Integer>(0, 65535), 8080);
 		int threads =  getCommandLineArgumentValue(args, threadsIndex, new NumericInterval<Integer>(1, 64), 32);
 		
-		System.out.printf("Port: %d%nThread count: %d%n", port, threads);
-		
 		SimpleServer server = SimpleServer.getInstance(port, threads);
 		Thread thread = new Thread(server);
 		thread.start();
 		
 		try {
-			Thread.currentThread().sleep(1000000);
+			Thread.currentThread().sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

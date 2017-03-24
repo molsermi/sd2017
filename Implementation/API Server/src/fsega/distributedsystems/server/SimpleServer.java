@@ -3,13 +3,16 @@ package fsega.distributedsystems.server;
 import java.net.Socket;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.time.ZonedDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.concurrent.Executors;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
+
+import fsega.distributedsystems.server.helpers.StringPrefixer;
 
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleServer implements Runnable {
+	private static Logger logger = Logger.getLogger(SimpleServer.class.getName());
 	private ExecutorService threadPool;
 	private ServerSocket serverSocket;
 	private boolean serverIsRunning;
@@ -34,23 +37,21 @@ public class SimpleServer implements Runnable {
 	
 	@Override
 	public void run() {
-		startServer();
+		serverLoop();
 	}
 	
-	private void startServer() {
+	private void serverLoop() {
 		openServerSocket();
-		
-		System.out.println(getFormattedEvent("Server started", false));
 		
 		while (serverIsRunning) {
 			Socket clientSocket = null;
 			
 			try {
 				clientSocket = serverSocket.accept();
-				System.out.println(getFormattedEvent("Established connection", true));
+				logger.info(String.format("Connection established with %s", clientSocket.getInetAddress().getHostAddress()));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.log(Level.SEVERE, StringPrefixer.getFullString("trying to establish a connection"), e);
+				continue;
 			}
 			
 			threadPool.execute(new SimpleWorker(clientSocket));
@@ -60,19 +61,17 @@ public class SimpleServer implements Runnable {
 	public void stopServer() {
 		serverIsRunning = false;
 		
-		if (serverSocket == null) {
+		try {
+			serverSocket.close();
+			logger.info("Server stopped");
+		} catch (IOException e) {
+			serverIsRunning = true;
+			logger.log(Level.SEVERE, StringPrefixer.getFullString("trying to stop the server"), e);
 			return;
 		}
 		
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		this.threadPool.shutdown();
-		System.out.println(getFormattedEvent("Server stopped", false));
+		
 	}
 	
 	private void openServerSocket() {
@@ -80,23 +79,24 @@ public class SimpleServer implements Runnable {
 		
 		try {
 			serverSocket = new ServerSocket(serverPort);
+			logger.info(String.format("Server is listening on port %d", serverPort));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			serverIsRunning = false;
+			logger.severe(e.getMessage());
 		}
 	}
 
-	private String getFormattedEvent(String event, boolean insertStartingSymbol) {
-		String formatted = String.format("%s at %s", event, getCurrentTime());
-		
-		if (insertStartingSymbol) {
-			formatted = "[*] " + formatted;
-		}
-		
-		return formatted;
-	}
+//	private String getFormattedEvent(String event, boolean insertStartingSymbol) {
+//		String formatted = String.format("%s at %s", event, getCurrentTime());
+//		
+//		if (insertStartingSymbol) {
+//			formatted = "[*] " + formatted;
+//		}
+//		
+//		return formatted;
+//	}
 	
-	private String getCurrentTime() {
-		return ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
-	}
+//	private String getCurrentTime() {
+//		return ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+//	}
 }
