@@ -38,11 +38,9 @@ public class HttpRequest implements AutoCloseable {
 
 	@Override
 	public void close() throws IOException {
-		if (reader != null) {
-			// will also close the underlying socket
-			// http://stackoverflow.com/questions/484925/does-closing-the-bufferedreader-printwriter-close-the-socket-connection
-			reader.close(); 
-		}
+		// will also close the underlying socket
+		// http://stackoverflow.com/questions/484925/does-closing-the-bufferedreader-printwriter-close-the-socket-connection
+		reader.close(); 
 	}
 	
 //	private static String extractRequestedResouce(String line) {
