@@ -22,16 +22,34 @@ public class ServerRunner {
 		int threads =  getCommandLineArgumentValue(args, threadsIndex, new NumericInterval<Integer>(1, 64), 32);
 		
 		SimpleServer server = SimpleServer.getInstance(port, threads);
-		Thread thread = new Thread(server);
-		thread.start();
 		
-		try {
-			Thread.currentThread().sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		// if it's running in the development environment, the server will stop by itself after X seconds
+		if (isDevEnvironment()) {
+			new Thread(server).start();
+			
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();				
+			}
+			server.stopServer();
+			
+		} else {
+			// http://zguide.zeromq.org/java:interrupt
+			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					server.stopServer();
+				}
+			}));
+			
+			server.run();
 		}
-		
-		server.stopServer();
+	}
+	
+	private static boolean isDevEnvironment() {
+		// http://stackoverflow.com/questions/2468059/how-to-detect-that-code-is-running-inside-eclipse-ide
+		return System.getenv("eclipse463") != null;
 	}
 	
 	private static int getCommandLineArgumentValue(String[] args, int itemIndex, NumericInterval<Integer> interval, 
