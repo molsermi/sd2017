@@ -7,8 +7,9 @@ import java.io.IOException;
 import fsega.distributedsystems.server.helpers.HttpContentType;
 import fsega.distributedsystems.server.helpers.HttpStatusCode;
 import fsega.distributedsystems.server.helpers.HttpResponse;
+import fsega.distributedsystems.server.helpers.HttpRequest;
 
-// http://tutorials.jenkov.com/java-multithreaded-servers
+// http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleWorker implements Runnable {
 	private Socket clientSocket;
 	
@@ -25,12 +26,16 @@ public class SimpleWorker implements Runnable {
 		if (clientSocket == null) {
 			return;
 		}
-
-		try (PrintWriter writer = new PrintWriter(clientSocket.getOutputStream())) {
+		
+		try (HttpRequest httpRequest = new HttpRequest(clientSocket.getInputStream());
+			 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream())) {
+			
+			System.out.println(httpRequest.getRequestedUrl());
 			writer.print(new HttpResponse(HttpStatusCode.Http200, HttpContentType.Text, "hello world"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
 }

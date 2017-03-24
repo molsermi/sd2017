@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 
-// http://tutorials.jenkov.com/java-multithreaded-servers
+// http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleServer implements Runnable {
 	private ExecutorService threadPool;
 	private ServerSocket serverSocket;

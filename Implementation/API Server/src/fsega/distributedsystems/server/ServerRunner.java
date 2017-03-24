@@ -18,7 +18,7 @@ public class ServerRunner {
 		thread.start();
 		
 		try {
-			Thread.currentThread().sleep(10000);
+			Thread.currentThread().sleep(1000000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
