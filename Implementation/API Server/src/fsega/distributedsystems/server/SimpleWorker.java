@@ -1,8 +1,12 @@
 package fsega.distributedsystems.server;
 
 import java.net.Socket;
+import java.io.PrintWriter;
 import java.io.IOException;
-import java.io.OutputStream;
+
+import fsega.distributedsystems.server.helpers.HttpContentType;
+import fsega.distributedsystems.server.helpers.HttpStatusCode;
+import fsega.distributedsystems.server.helpers.HttpResponse;
 
 // http://tutorials.jenkov.com/java-multithreaded-servers
 public class SimpleWorker implements Runnable {
@@ -21,11 +25,9 @@ public class SimpleWorker implements Runnable {
 		if (clientSocket == null) {
 			return;
 		}
-		
-		String header = "HTTP/1.1 200 OK\n\n";
-		String message = "hello world";
-		try (OutputStream outputStream = clientSocket.getOutputStream()) {
-			outputStream.write((header + String.format("<head><body>%s</body></head>", message)).getBytes());
+
+		try (PrintWriter writer = new PrintWriter(clientSocket.getOutputStream())) {
+			writer.print(new HttpResponse(HttpStatusCode.Http200, HttpContentType.Text, "hello world"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
