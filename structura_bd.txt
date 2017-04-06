@@ -1,0 +1,24 @@
+-- !denumirea bazei de date este historicaldata
+
+-- Table: public.data
+
+DROP TABLE public.data;
+
+CREATE TABLE public.data
+(   iddata integer PRIMARY KEY,
+    date date,
+    open double precision,
+    high double precision,
+    low double precision,
+    close double precision,
+    volume double precision,
+    adjclose double precision,
+    symbol character varying
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.data
+    OWNER to postgres;
