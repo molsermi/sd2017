@@ -1,4 +1,4 @@
-package fsega.distributedsystems.server.helpers;
+package fsega.distributedsystems.server.util;
 
 public enum HttpContentType {
 	Text ("text/html"),

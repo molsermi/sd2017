@@ -8,27 +8,18 @@ import java.util.logging.Logger;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
-import fsega.distributedsystems.server.helpers.StringPrefixer;
-
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleServer implements Runnable {
 	private static Logger logger = Logger.getLogger(SimpleServer.class.getName());
+	
 	private ExecutorService threadPool;
 	private ServerSocket serverSocket;
-	private boolean serverIsRunning;
+	private boolean running;
 	private int serverPort;
-	
-	private SimpleServer() {
-		this(8080, 32);
-	}
 	
 	private SimpleServer(int serverPort, int threadPoolSize) {
 		this.serverPort = serverPort;
 		this.threadPool = Executors.newFixedThreadPool(threadPoolSize);
-	}
-	
-	public static SimpleServer getInstance() {
-		return new SimpleServer();
 	}
 	
 	public static SimpleServer getInstance(int serverPort, int threadPoolSize) {
@@ -41,16 +32,17 @@ public class SimpleServer implements Runnable {
 	}
 	
 	private void serverLoop() {
+		running = true;
 		openServerSocket();
 		
-		while (serverIsRunning) {
+		while (running) {
 			Socket clientSocket = null;
 			
 			try {
 				clientSocket = serverSocket.accept();
-				logger.info(String.format("Connection established with %s", clientSocket.getInetAddress().getHostAddress()));
+				logger.info("Connection established with " + clientSocket.getInetAddress().getHostAddress());
 			} catch (IOException e) {
-				logger.log(Level.SEVERE, StringPrefixer.getFullString("trying to establish a connection"), e);
+				logger.log(Level.SEVERE, "Couldn't establish connection", e);
 				continue;
 			}
 			
@@ -59,29 +51,24 @@ public class SimpleServer implements Runnable {
 	}
 	
 	public void stopServer() {
-		serverIsRunning = false;
-		
 		try {
 			serverSocket.close();
-			logger.info("Server stopped");
 		} catch (IOException e) {
-			serverIsRunning = true;
-			logger.log(Level.SEVERE, StringPrefixer.getFullString("trying to stop the server"), e);
+			logger.log(Level.SEVERE, "Couldn't properly stop the server", e);
 			return;
 		}
 		
-		this.threadPool.shutdown();
-		
+		running = false;
+		threadPool.shutdown();
+		logger.info("Server stopped");
 	}
 	
 	private void openServerSocket() {
-		serverIsRunning = true;
-		
 		try {
 			serverSocket = new ServerSocket(serverPort);
 			logger.info(String.format("Server is listening on port %d", serverPort));
 		} catch (IOException e) {
-			serverIsRunning = false;
+			running = false;
 			logger.severe(e.getMessage());
 		}
 	}

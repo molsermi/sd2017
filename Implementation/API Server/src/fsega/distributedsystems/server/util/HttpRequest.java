@@ -1,4 +1,4 @@
-package fsega.distributedsystems.server.helpers;
+package fsega.distributedsystems.server.util;
 
 import java.io.IOException;
 import java.io.InputStream;

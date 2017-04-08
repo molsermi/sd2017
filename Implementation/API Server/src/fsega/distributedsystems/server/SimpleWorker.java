@@ -6,19 +6,20 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import fsega.distributedsystems.server.helpers.StringPrefixer;
-import fsega.distributedsystems.server.helpers.HttpContentType;
-import fsega.distributedsystems.server.helpers.HttpStatusCode;
-import fsega.distributedsystems.server.helpers.HttpResponse;
-import fsega.distributedsystems.server.helpers.HttpRequest;
+import fsega.distributedsystems.server.util.HttpContentType;
+import fsega.distributedsystems.server.util.HttpRequest;
+import fsega.distributedsystems.server.util.HttpResponse;
+import fsega.distributedsystems.server.util.HttpStatusCode;
 
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleWorker implements Runnable {
 	private Socket clientSocket;
+	private String clientIpAddress;
 	private static Logger logger = Logger.getLogger(SimpleWorker.class.getName());
 	
 	public SimpleWorker(Socket clientSocket) {
 		this.clientSocket = clientSocket;
+		this.clientIpAddress = clientSocket.getInetAddress().getHostAddress();
 	}
 	
 	@Override
@@ -28,13 +29,12 @@ public class SimpleWorker implements Runnable {
 
 	private void processClientRequest() {
 		try (HttpRequest httpRequest = new HttpRequest(clientSocket.getInputStream());
-			 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream())) {
+			 PrintWriter responseWriter = new PrintWriter(clientSocket.getOutputStream())) {
 
-			logger.info(String.format("%s sent: %s", clientSocket.getInetAddress().getHostAddress(), 
-									  httpRequest.getRequestedMethodLine()));
-			writer.print(new HttpResponse(HttpStatusCode.Http200, HttpContentType.Text, "hello world"));
+			logger.info(String.format("%s sent: %s", clientIpAddress, httpRequest.getRequestedMethodLine()));
+			responseWriter.print(new HttpResponse(HttpStatusCode.Http200, HttpContentType.Text, "hello world"));
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, StringPrefixer.getFullString("trying to process a client request"), e);
+			logger.log(Level.SEVERE, "Couldn't properly process client request", e);
 		}
 	}
 	

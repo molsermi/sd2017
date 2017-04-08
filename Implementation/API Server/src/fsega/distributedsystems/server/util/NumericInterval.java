@@ -1,4 +1,4 @@
-package fsega.distributedsystems.server.helpers;
+package fsega.distributedsystems.server.util;
 
 public class NumericInterval <T extends Number> {
 	private T min;

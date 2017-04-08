@@ -4,16 +4,19 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.logging.FileHandler;
 
-import fsega.distributedsystems.server.helpers.NumericInterval;
+import fsega.distributedsystems.server.util.NumericInterval;
+import fsega.distributedsystems.server.util.TextLogFormatter;
+
 
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class ServerRunner {
-	private static Logger logger = Logger.getLogger("");
-	private static final String logFilePattern = "serverLog.%g.%u.xml";
+	private static Logger logger = Logger.getLogger(trimSubpackage(ServerRunner.class.getPackage().getName()));
+	private static final String logFilePattern = "serverLog.log";
 	
 	public static void main(String[] args) throws SecurityException, IOException {
-		// since this is the root logger, all logs will propagate to it
-		logger.addHandler(new FileHandler(logFilePattern, 10240, 5, true));
+		FileHandler fileHandler = new FileHandler(logFilePattern, 10240, 1, false);
+		fileHandler.setFormatter(new TextLogFormatter());
+		logger.addHandler(fileHandler);
 		
 		int portIndex = findArgIndex(args, "--port");
 		int threadsIndex = findArgIndex(args, "--threads");
@@ -70,5 +73,9 @@ public class ServerRunner {
 		}
 		
 		return -1;
+	}
+	
+	private static String trimSubpackage(String packageName) {
+		return packageName.substring(0, packageName.lastIndexOf('.'));
 	}
 }
