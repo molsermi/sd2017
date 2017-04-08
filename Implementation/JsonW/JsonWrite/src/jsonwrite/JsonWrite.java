@@ -25,7 +25,10 @@ public class JsonWrite {
         jsonObject .put("SERVICE_NAME:", "S1");
         jsonObject .put("VALUE:", "3.47");
         
-        
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put("SERVICE_NAME: S1");
+        jsonArray.put("VALUE: 3.47");
+        jsonObject.put("Scrie", jsonArray);
         
         
         try{
