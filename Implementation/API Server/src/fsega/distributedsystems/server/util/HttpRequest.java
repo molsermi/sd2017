@@ -25,7 +25,7 @@ public class HttpRequest implements AutoCloseable {
 	
 	private static String extractUri(String line) {
 		String[] lineArray = line.split("\\s");
-		return lineArray[1];
+		return lineArray[1].replaceFirst("/", "");
 	}
 	
 	public String getRequestedUrl() {
