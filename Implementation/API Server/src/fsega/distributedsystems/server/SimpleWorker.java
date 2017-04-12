@@ -10,6 +10,7 @@ import fsega.distributedsystems.server.util.HttpContentType;
 import fsega.distributedsystems.server.util.HttpRequest;
 import fsega.distributedsystems.server.util.HttpResponse;
 import fsega.distributedsystems.server.util.HttpStatusCode;
+import fsega.distributedsystems.server.util.OutputBuilder;
 
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleWorker implements Runnable {
@@ -32,10 +33,23 @@ public class SimpleWorker implements Runnable {
 			 PrintWriter responseWriter = new PrintWriter(clientSocket.getOutputStream())) {
 
 			logger.info(String.format("%s sent: %s", clientIpAddress, httpRequest.getRequestedMethodLine()));
-			responseWriter.print(new HttpResponse(HttpStatusCode.Http200, HttpContentType.Text, "hello world"));
+			
+			String requestedUrl = httpRequest.getRequestedUrl();
+			HttpResponse httpResponse = null;
+			String jsonOutput = null;
+			
+			try {
+				jsonOutput = OutputBuilder.getJsonForUrl(requestedUrl);
+				httpResponse = new HttpResponse(HttpStatusCode.Http200, HttpContentType.Json, jsonOutput);
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Couldn't get JSON result", e);
+				httpResponse = new HttpResponse(HttpStatusCode.Http404, HttpContentType.Text, e.getMessage());
+			}
+			
+			responseWriter.print(httpResponse);
+			
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Couldn't properly process client request", e);
 		}
 	}
-	
 }
