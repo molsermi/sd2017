@@ -45,4 +45,31 @@ public class JsonWrite {
         return jsonObject;
     }
 
+
+    public JSONObject jsonWriterCustomize(String FieldServiceName , String ServiceName , String FieldValue , String Value) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(FieldServiceName, ServiceName);
+        jsonObject.put(FieldValue, Value);
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(FieldServiceName + ":" + ServiceName);
+        jsonArray.put(FieldValue + ":" + Value);
+        jsonObject.put(JsonObjectValues.ACTION.value(), jsonArray);
+
+
+        try {
+            FileWriter jsonFileWriter = new FileWriter(jsonFilePath);
+            jsonFileWriter.write(jsonObject.toString());
+            jsonFileWriter.flush();
+            jsonFileWriter.close();
+            System.out.println(jsonObject);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
 }
