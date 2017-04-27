@@ -3,44 +3,44 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jsonwrite;
+package OutputBuilder.JsonWrite.src.jsonwrite;
+
 import org.json.JSONObject;
 import org.json.JSONArray;
+
 import java.io.IOException;
 import java.io.FileWriter;
+
 import org.json.JSONException;
+
 /**
- *
  * @author Florin
  */
 public class JsonWrite {
-    private static final String jsonFilePath="D:\\Master an 1\\Sem 2\\Sisteme distribuite\\SD\\Proiect\\JsonWrite.json";
+    private static final String jsonFilePath = "C:\\SD\\sd2017\\JsonWrite.json";
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws JSONException {
+    public void jsonWriter() throws JSONException {
         // TODO code application logic here
         JSONObject jsonObject = new JSONObject();
-        jsonObject .put("SERVICE_NAME:", "S1");
-        jsonObject .put("VALUE:", "3.47");
-        
+        jsonObject.put(JsonObjectValues.FIELD_SERVICE_NAME.value(), JsonObjectValues.SERVICE_VERSION.value());
+        jsonObject.put(JsonObjectValues.FIELD_VALUE.value(), JsonObjectValues.VALUE.value());
+
         JSONArray jsonArray = new JSONArray();
-        jsonArray.put("SERVICE_NAME: S1");
-        jsonArray.put("VALUE: 3.47");
+        jsonArray.put(JsonObjectValues.FIELD_SERVICE_NAME.value() + ":" + JsonObjectValues.SERVICE_VERSION.value());
+        jsonArray.put(JsonObjectValues.FIELD_VALUE.value() + ":" + JsonObjectValues.VALUE.value());
         jsonObject.put("Scrie", jsonArray);
-        
-        
-        try{
+
+
+        try {
             FileWriter jsonFileWriter = new FileWriter(jsonFilePath);
             jsonFileWriter.write(jsonObject.toString());
             jsonFileWriter.flush();
             jsonFileWriter.close();
             System.out.println(jsonObject);
-        
-        }catch (IOException e){
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
 }

@@ -24,7 +24,7 @@ public class ServerRunner {
 		int port = getCommandLineArgumentValue(args, portIndex, new NumericInterval<Integer>(0, 65535), 8080);
 		int threads =  getCommandLineArgumentValue(args, threadsIndex, new NumericInterval<Integer>(1, 64), 32);
 		
-		SimpleServer server = SimpleServer.getInstance(port, threads);
+		final SimpleServer server = SimpleServer.getInstance(port, threads);
 		
 		// if it's running in the development environment, the server will stop by itself after X seconds
 		if (isDevEnvironment()) {
