@@ -11,7 +11,7 @@ public class OutputBuilderTests {
     JsonWrite OutputBuilder = new JsonWrite();
 
     @Test
-    public void test() throws JSONException {
+    public void OutputBuilder_Success() throws JSONException {
         OutputBuilder.jsonWriter();
         Assert.assertEquals(OutputBuilder.jsonWriter().getString("SERVICE_NAME"),JsonObjectValues.SERVICE_VERSION.value(),"The value for the SERVICE_NAME field was inccorect");
         Assert.assertEquals(OutputBuilder.jsonWriter().getString("VALUE"),JsonObjectValues.VALUE.value(),"The value for the VALUE filed was inccorect");
