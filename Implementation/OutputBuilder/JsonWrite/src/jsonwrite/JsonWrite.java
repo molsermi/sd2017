@@ -19,7 +19,7 @@ import org.json.JSONException;
 public class JsonWrite {
     private static final String jsonFilePath = "C:\\SD\\sd2017\\JsonWrite.json";
 
-    public void jsonWriter() throws JSONException {
+    public JSONObject jsonWriter() throws JSONException {
         // TODO code application logic here
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(JsonObjectValues.FIELD_SERVICE_NAME.value(), JsonObjectValues.SERVICE_VERSION.value());
@@ -28,7 +28,7 @@ public class JsonWrite {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(JsonObjectValues.FIELD_SERVICE_NAME.value() + ":" + JsonObjectValues.SERVICE_VERSION.value());
         jsonArray.put(JsonObjectValues.FIELD_VALUE.value() + ":" + JsonObjectValues.VALUE.value());
-        jsonObject.put("Scrie", jsonArray);
+        jsonObject.put(JsonObjectValues.ACTION.value(), jsonArray);
 
 
         try {
@@ -41,6 +41,8 @@ public class JsonWrite {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return jsonObject;
     }
 
 }

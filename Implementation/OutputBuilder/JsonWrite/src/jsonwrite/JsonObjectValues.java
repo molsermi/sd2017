@@ -7,7 +7,8 @@ public enum JsonObjectValues {
     FIELD_SERVICE_NAME("SERVICE_NAME"),
     FIELD_VALUE("VALUE"),
     SERVICE_VERSION("S1"),
-    VALUE("3.47");
+    VALUE("3.47"),
+    ACTION("Scrie");
 
     private String value;
 
