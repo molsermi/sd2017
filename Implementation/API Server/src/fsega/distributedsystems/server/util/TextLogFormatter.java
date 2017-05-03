@@ -19,7 +19,7 @@ public class TextLogFormatter extends Formatter {
 		
 		if (record.getThrown() != null) {
 			Throwable thrown = record.getThrown();
-//			StringBuilder append = stringBuilder.append(String.format("%s: %s%n", thrown.getClass().getTypeName(), thrown.getMessage()));
+			stringBuilder.append(String.format("%s: %s%n", thrown.getClass().getTypeName(), thrown.getMessage()));
 			for (StackTraceElement stackTraceElement : thrown.getStackTrace()) {
 				stringBuilder.append(String.format("\t at %s%n", stackTraceElement));
 			}

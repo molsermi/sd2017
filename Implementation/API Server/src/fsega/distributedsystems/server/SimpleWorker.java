@@ -40,7 +40,7 @@ public class SimpleWorker implements Runnable {
 			String jsonOutput = null;
 			
 			try {
-				jsonOutput = OutputBuilder.getJsonForParsedUrl(requestedUrl);
+				jsonOutput = OutputBuilder.getJsonForUrl(requestedUrl);
 				httpResponse = new HttpResponse(HttpStatusCode.Http200, HttpContentType.Json, jsonOutput);
 			} catch (Exception e) {
 				logger.log(Level.SEVERE, "Couldn't get JSON result", e);

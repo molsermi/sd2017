@@ -24,14 +24,14 @@ public class ServerRunner {
 		int port = getCommandLineArgumentValue(args, portIndex, new NumericInterval<Integer>(0, 65535), 8080);
 		int threads =  getCommandLineArgumentValue(args, threadsIndex, new NumericInterval<Integer>(1, 64), 32);
 		
-		final SimpleServer server = SimpleServer.getInstance(port, threads);
+		SimpleServer server = SimpleServer.getInstance(port, threads);
 		
 		// if it's running in the development environment, the server will stop by itself after X seconds
 		if (isDevEnvironment()) {
 			new Thread(server).start();
 			
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(10000000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();				
 			}
