@@ -36,6 +36,11 @@ public class SimpleWorker implements Runnable {
 			
 			String requestedUrl = httpRequest.getRequestedUrl();
 			
+			// ignore favicon request
+			if (requestedUrl.equals("favicon.ico")) {
+				return;
+			}
+			
 			HttpResponse httpResponse = null;
 			String jsonOutput = null;
 			
