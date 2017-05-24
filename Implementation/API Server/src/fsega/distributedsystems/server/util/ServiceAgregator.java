@@ -19,7 +19,7 @@ public class ServiceAgregator {
 		String result = null;
 		String serviceName = parsedUrl.getServiceName();
 		
-		if (!(serviceName.equals("S1") || serviceName.equals("S2"))) {
+		if (!serviceName.equals("S1") && !serviceName.equals("S2")) {
 			throw new NoSuchServiceException(String.format("Cannot provide results for service \"%s\"", serviceName));
 		}
 		
