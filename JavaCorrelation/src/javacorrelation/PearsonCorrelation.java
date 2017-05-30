@@ -10,7 +10,7 @@ import java.util.List;
 public class PearsonCorrelation {
 
     
-    public static double Correlation(int[] xValues, int[] yValues) {
+    public static double getCorrelation(ArrayList<Float> xValues,ArrayList<Float> yValues) {
     
     //Vectorii xValues si yValues sunt utilizati in scopul stocarii valorilor titlurilor pe piata. 
     // Variabila xSum face referire la suma tuturor valorilor din vectorul xValues si, respectiv, yValues;
@@ -25,11 +25,11 @@ public class PearsonCorrelation {
     double xySum = 0.0;
 
     
-    int n = xValues.length;
+    int n = xValues.size();
 
     for(int i = 0; i < n; ++i) {
-      double x = xValues[i];
-      double y = yValues[i];
+      double x = xValues.get(i);
+      double y = yValues.get(i);
 
       xSum += x;
       ySum += y;

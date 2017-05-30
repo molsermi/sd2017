@@ -1,43 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package javacorrelation;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.util.Scanner;
 
 
 public class JavaCorrelation {
 
-    public static void main(String[] args) {
-
-        //In aceasta faza datele calendaristice nu sunt relevante, dar ne vom 
-        //folosi de aceste variabile ulterior, cand va trebui sa extragem datele 
-        //care se incadreaza doar in intervalul specificat de utilizator.
-        Date date1 = new Date(2017,01,12);
-        Date date2 = new Date(2017,02,12);
-        DateNeeded d1 = new DateNeeded();
-        Date startDate = d1.getDate();
+    public static void main(String[] args) throws ParseException {
         
-        DateNeeded d2 = new DateNeeded();
-        Date endDate = d2.getDate();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         
-        //In acest moment, corelarea se face doar intre datele de proba din vectorul 
-        //valSimbol1 si valSimbol2, urmand ca mai apoi prin conexiunea la baza de date 
-        //si crearea de interogari necesare sa se testeze corelatia pe date reale.
+        java.util.Date date1 = format.parse("18/05/2017");
+        java.util.Date date2 = format.parse("25/05/2017");
         
-        int[] valSimbol1={1,2,3};
-        int[] valSimbol2 = {3,2,1};
-   double res =  PearsonCorrelation.Correlation(valSimbol1, valSimbol2);
-           System.out.println("The result is " + res);
+        double res1, res2;
+        res1 = Svc1_OSYMDE.getSvc1("Russell 2000", date1, date2, "New York", "Chicago");
+                System.out.print("\nThe Pearson coefficient for first service is = " + res1);
                 
-            }
-        
+        res2 = Svc2_TSYMSE.getSvc2("Russell 2000", "Nikkei", date1, date2, "Chicago");
+                System.out.print("\nThe Pearson coefficient for the second service service is = " + res2);
+
+
     }
+}
 
 
     
