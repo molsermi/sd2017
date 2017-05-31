@@ -3,11 +3,11 @@ package fsega.distributedsystems.server.util;
 import fsega.distributedsystems.server.util.exceptions.NoSuchServiceException;
 
 public class ServiceAgregator {
-	private static String fakeCompMeth1(String beginDate, String endDate, String symbol1, String symbol2, String exchange) {
+	private static String fakeCompMeth1(String symbol1, String beginDate, String endDate, String exchange1, String exchange2) {
 		return "10|aceasta valoare este cool";
 	}
 	
-	private static String fakeCompMeth2(String beginDate, String endDate, String symbol1, String symbol2, String exchange) {
+	private static String fakeCompMeth2(String symbol1, String symbol2, String beginDate, String endDate, String exchange) {
 		return "20|aceasta valoare este si mai cool";
 	}
 	
@@ -25,9 +25,9 @@ public class ServiceAgregator {
 		
 		switch (parsedUrl.getServiceName()) {
 		case "S1":
-			return fakeCompMeth1(parsedUrl.getBeginDate(), parsedUrl.getEndDate(), parsedUrl.getSymbol1(), parsedUrl.getSymbol2(), parsedUrl.getExchange());
+			return fakeCompMeth1(parsedUrl.getSymbol1(), parsedUrl.getBeginDate(), parsedUrl.getEndDate(), parsedUrl.getExtra(), parsedUrl.getExchange());
 		case "S2":
-			return fakeCompMeth2(parsedUrl.getBeginDate(), parsedUrl.getEndDate(), parsedUrl.getSymbol1(), parsedUrl.getSymbol2(), parsedUrl.getExchange());
+			return fakeCompMeth2(parsedUrl.getSymbol1(), parsedUrl.getExtra(), parsedUrl.getBeginDate(), parsedUrl.getEndDate(), parsedUrl.getExchange());
 		}
 		
 		return result;

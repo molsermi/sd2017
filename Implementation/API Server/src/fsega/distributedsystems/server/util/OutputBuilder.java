@@ -51,7 +51,7 @@ public class OutputBuilder {
 		jsonObject.put("EXCHANGE", parsedUrl.getExchange());
 		jsonObject.put("END_DATE", parsedUrl.getEndDate());
 		jsonObject.put("SYM1", parsedUrl.getSymbol1());
-		jsonObject.put("SYM2", parsedUrl.getSymbol2());
+		jsonObject.put("EXTRA", parsedUrl.getExtra());
 		
 		jsonObject.put("CORRELATION_COEFFIECIENT", coefficient);
 		jsonObject.put("INTERPRETATION", interpretation);
