@@ -6,33 +6,26 @@ public class CachedResult {
 	
 	private long timestamp;
 	private ParsedUrl parsedUrl;
+	private String compMethodResult;
 	
-	private double correlation;
-	private String interpretation;
-	
-	public CachedResult(int expiration, long timestamp, ParsedUrl parsedUrl, double correlation, String interpretation) {
-		this.expiration = expiration;
-		
-		this.timestamp = timestamp;
+	public CachedResult(int expiration, ParsedUrl parsedUrl, String compMethodResult) {
 		this.parsedUrl = parsedUrl;
-		this.correlation = correlation;
-		this.interpretation = interpretation;
+		this.expiration = expiration;
+		this.compMethodResult = compMethodResult;
+		
+		this.timestamp = System.currentTimeMillis();
 	}
 	
 	public ParsedUrl getParsedUrl() {
 		return parsedUrl;
 	}
 	
-	public double getCorrelation() {
-		return correlation;
-	}
-	
-	public String getInterpretation() {
-		return interpretation;
+	public String getCompMethodResult() {
+		return compMethodResult;
 	}
 	
 	public boolean isExpired() {
 		long currentTimestamp = System.currentTimeMillis();
-		return expiration * 1000 + timestamp > currentTimestamp;
+		return currentTimestamp - timestamp > expiration * 1000;
 	}
 }

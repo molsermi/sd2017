@@ -20,11 +20,13 @@ public class ServerRunner {
 		
 		int portIndex = findArgIndex(args, "--port");
 		int threadsIndex = findArgIndex(args, "--threads");
+		int cacheExpirationIndex = findArgIndex(args, "--cacheExpiration");
 		
 		int port = getCommandLineArgumentValue(args, portIndex, new NumericInterval<Integer>(0, 65535), 8080);
-		int threads =  getCommandLineArgumentValue(args, threadsIndex, new NumericInterval<Integer>(1, 64), 32);
+		int threads =  getCommandLineArgumentValue(args, threadsIndex, new NumericInterval<Integer>(1, 128), 32);
+		int cacheExpiration = getCommandLineArgumentValue(args, cacheExpirationIndex, new NumericInterval<Integer>(0, Integer.MAX_VALUE), 0);
 		
-		SimpleServer server = SimpleServer.getInstance(port, threads);
+		SimpleServer server = SimpleServer.getInstance(port, threads, cacheExpiration);
 		
 		// if it's running in the development environment, the server will stop by itself after X seconds
 		if (isDevEnvironment()) {

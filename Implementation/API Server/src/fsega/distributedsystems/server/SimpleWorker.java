@@ -17,11 +17,13 @@ import fsega.distributedsystems.server.util.ServiceAgregator;
 // http://tutorials.jenkov.com/java-multithreaded-servers/
 public class SimpleWorker implements Runnable {
 	private Socket clientSocket;
+	private int cacheExpiration;
 	private String clientIpAddress;
 	private static Logger logger = Logger.getLogger(SimpleWorker.class.getName());
 	
-	public SimpleWorker(Socket clientSocket) {
+	public SimpleWorker(Socket clientSocket, int cacheExpiration) {
 		this.clientSocket = clientSocket;
+		this.cacheExpiration = cacheExpiration;
 		this.clientIpAddress = clientSocket.getInetAddress().getHostAddress();
 	}
 	
@@ -48,7 +50,8 @@ public class SimpleWorker implements Runnable {
 			
 			try {
 				ParsedUrl parsedUrl = ParsedUrl.fromRequestUrl(requestedUrl);
-				String serviceResult = ServiceAgregator.getDataFromUrl(parsedUrl);
+				String serviceResult = ServiceAgregator.getDataFromUrl(cacheExpiration, parsedUrl);
+				
 				jsonOutput = OutputBuilder.getJsonForServiceResult(parsedUrl, serviceResult);
 				httpResponse = new HttpResponse(HttpStatusCode.Http200, HttpContentType.Json, jsonOutput);
 			} catch (Exception e) {

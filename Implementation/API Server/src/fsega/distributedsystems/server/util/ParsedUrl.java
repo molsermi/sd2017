@@ -106,4 +106,10 @@ public class ParsedUrl {
 		
 		return extractedParameterValues.toArray(new String[0]);
 	}
+
+	public boolean equals(ParsedUrl other) {
+		return serviceName.equals(other.serviceName) && p_beginDate.equals(other.getBeginDate()) &&
+			   p_endDate.equals(other.getEndDate()) && p_symbol1.equals(other.getSymbol1()) &&
+			   p_extra.equals(other.getExtra()) && p_exchange.equals(other.getExchange());
+	}
 }

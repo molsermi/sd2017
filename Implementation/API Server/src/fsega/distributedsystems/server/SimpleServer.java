@@ -16,14 +16,22 @@ public class SimpleServer implements Runnable {
 	private ServerSocket serverSocket;
 	private boolean running;
 	private int serverPort;
+	private int cacheExpiration;
 	
-	private SimpleServer(int serverPort, int threadPoolSize) {
+	private SimpleServer(int serverPort, int threadPoolSize, int cacheExpiration) {
 		this.serverPort = serverPort;
+		this.cacheExpiration = cacheExpiration;
 		this.threadPool = Executors.newFixedThreadPool(threadPoolSize);
+		
+		if (cacheExpiration == 0) {
+			logger.warning("Cache expiration was set to 0, caching is disabled");
+		} else {
+			logger.info(String.format("Result caching is enabled. Cached results will expire every %d seconds", cacheExpiration));
+		}
 	}
 	
-	public static SimpleServer getInstance(int serverPort, int threadPoolSize) {
-		return new SimpleServer(serverPort, threadPoolSize);
+	public static SimpleServer getInstance(int serverPort, int threadPoolSize, int cacheExpiration) {
+		return new SimpleServer(serverPort, threadPoolSize, cacheExpiration);
 	}
 	
 	@Override
@@ -46,7 +54,7 @@ public class SimpleServer implements Runnable {
 				continue;
 			}
 			
-			threadPool.execute(new SimpleWorker(clientSocket));
+			threadPool.execute(new SimpleWorker(clientSocket, cacheExpiration));
 		}
 	}
 	
