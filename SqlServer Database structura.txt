@@ -1,0 +1,21 @@
+ USE [historicaldata]
+GO 
+
+
+CREATE TABLE [dbo].[date](
+	[iddata] [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	[date] [date] NULL,
+	[open] [float] NULL,
+	[high] [float] NULL,
+	[low] [float] NULL,
+	[close] [float] NULL,
+	[volume] [float] NULL,
+	[adjclose] [float] NULL,
+	[symbol] [varchar](50) NULL,
+	[idexchange] [int] FOREIGN KEY REFERENCES exchange(idexchange)
+	);
+
+CREATE TABLE [dbo].[exchange](
+	[idexchange] [int] IDENTITY(1,1) NOT NULL,
+	[marketsymbol] [varchar](1) NULL
+	);
