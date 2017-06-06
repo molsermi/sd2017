@@ -19,3 +19,6 @@ CREATE TABLE [dbo].[exchange](
 	[idexchange] [int] IDENTITY(1,1) NOT NULL,
 	[marketsymbol] [varchar](1) NULL
 	);
+	
+ALTER TABLE [dbo].[date]  WITH CHECK ADD FOREIGN KEY([idexchange])
+REFERENCES [dbo].[exchange] ([idexchange])
