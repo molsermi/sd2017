@@ -2,9 +2,11 @@ package fsega.distributedsystems.server.util;
 
 import org.json.JSONObject;
 
-//import fsega.distributedsystems.server.util.exceptions.NoSuchServiceException;
-//import fsega.distributedsystems.server.util.exceptions.ParameterNotFoundException;
-
+/**
+ * Builds JSON from parsed computational method results
+ * @author sidf
+ *
+ */
 public class OutputBuilder {
 //	public static String getJsonForUrl(String url) throws ParameterNotFoundException, NoSuchServiceException {
 //		final JSONObject jsonObject = new JSONObject();
@@ -34,13 +36,21 @@ public class OutputBuilder {
 //		return jsonObject.toString();
 //	}
 	
+	/**
+	 * Generates a JSON string from the given parameters
+	 * @param parsedUrl data used to build the JSON string
+	 * @param serviceResult string that represents the 'coefficient' in the generated JSON
+	 * @return a string, representing the JSON serialized parameters
+	 */
 	public static String getJsonForServiceResult(ParsedUrl parsedUrl, String serviceResult) {
 		final JSONObject jsonObject = new JSONObject();
 		
-		String[] splitResult = serviceResult.split("\\|");
+		// String[] splitResult = serviceResult.split("\\|");
 		
-		String coefficient = splitResult[0];
-		String interpretation = splitResult[1];
+		//String coefficient = splitResult[0];
+		//String interpretation = splitResult[1];
+		
+		String coefficient = serviceResult;
 		
 		String serviceName = parsedUrl.getServiceName();
 		
@@ -54,7 +64,8 @@ public class OutputBuilder {
 		jsonObject.put("EXTRA", parsedUrl.getExtra());
 		
 		jsonObject.put("CORRELATION_COEFFIECIENT", coefficient);
-		jsonObject.put("INTERPRETATION", interpretation);
+		
+		// jsonObject.put("INTERPRETATION", interpretation);
 		
 		return jsonObject.toString();
 	}

@@ -39,6 +39,10 @@ public class SimpleServer implements Runnable {
 		serverLoop();
 	}
 	
+	/**
+	 * Builds TCP sockets for each incoming client, then builds {@link SimpleWorker} instances for each
+	 * socket. Each worker is then scheduled for running via a thread pool
+	 */
 	private void serverLoop() {
 		running = true;
 		openServerSocket();

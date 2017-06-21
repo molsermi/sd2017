@@ -31,12 +31,17 @@ public class SimpleWorker implements Runnable {
 	public void run() {
 		processClientRequest();
 	}
-
+	
+	/**
+	 * This method reads the HTTP request, gets it parsed, gets a result from the 
+	 * the service agregator, gets it serialized, then builds it a HTTP response based on the serialized data,
+	 * which is then written to client as a HTTP response
+	 */
 	private void processClientRequest() {
 		try (HttpRequest httpRequest = new HttpRequest(clientSocket.getInputStream());
 			 PrintWriter responseWriter = new PrintWriter(clientSocket.getOutputStream())) {
 
-			logger.info(String.format("%s sent: %s", clientIpAddress, httpRequest.getRequestedMethodLine()));
+			logger.info(String.format("%s sent: %s", clientIpAddress, httpRequest.getRequestLine()));
 			
 			String requestedUrl = httpRequest.getRequestedUrl();
 			
@@ -54,6 +59,7 @@ public class SimpleWorker implements Runnable {
 				
 				jsonOutput = OutputBuilder.getJsonForServiceResult(parsedUrl, serviceResult);
 				httpResponse = new HttpResponse(HttpStatusCode.Http200, HttpContentType.Json, jsonOutput);
+				
 			} catch (Exception e) {
 				logger.log(Level.SEVERE, "Couldn't get JSON result", e);
 				httpResponse = new HttpResponse(HttpStatusCode.Http404, HttpContentType.Text, 

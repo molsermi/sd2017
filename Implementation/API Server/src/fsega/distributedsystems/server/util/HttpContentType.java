@@ -1,5 +1,6 @@
 package fsega.distributedsystems.server.util;
 
+
 public enum HttpContentType {
 	Text ("text/html"),
 	Json ("application/json");
